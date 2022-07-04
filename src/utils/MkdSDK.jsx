@@ -2,7 +2,7 @@ export default function MkdSDK() {
   this._baseurl = "https://reacttask.mkdlabs.com";
   this._project_id = "reacttask";
   this._secret = "5fchxn5m8hbo6jcxiq3xddofodoacskye";
-  this._table = "";
+  this._table = "video";
   this._custom = "";
   this._method = "";
 
@@ -15,11 +15,11 @@ export default function MkdSDK() {
   
   this.login = async function (email, password, role) {
     //TODO
-    const getResult = await fetch('https://reacttask.mkdlabs.com/v2/api/lambda/login', {
+    const getResult = await fetch(this._baseurl + `/v2/api/lambda/login`, {
       method: 'POST', 
       headers: {
         'Content-Type': 'application/json',
-        'x-project': 'cmVhY3R0YXNrOjVmY2h4bjVtOGhibzZqY3hpcTN4ZGRvZm9kb2Fjc2t5ZQ==',
+        'x-project': base64Encode,
       },
       body: JSON.stringify({email, password, role})
     })
@@ -116,31 +116,6 @@ export default function MkdSDK() {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
       body: JSON.stringify(role)
-    })
-
-    const jsonGet = await getResult.json();
-
-    if (getResult.status === 401) {
-      throw new Error(jsonGet.message);
-    }
-
-    if (getResult.status === 403) {
-      throw new Error(jsonGet.message);
-    }
-
-    return jsonGet;
-  };
-
-  this.video = async function (page, limit) {
-    //TODO
-    const getResult = await fetch('https://reacttask.mkdlabs.com/v1/api/rest/video/PAGINATE', {
-      method: 'POST', 
-      headers: {
-        'Content-Type': 'application/json',
-        'x-project': 'cmVhY3R0YXNrOjVmY2h4bjVtOGhibzZqY3hpcTN4ZGRvZm9kb2Fjc2t5ZQ==',
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-      body: JSON.stringify({payload: {}, page, limit})
     })
 
     const jsonGet = await getResult.json();
