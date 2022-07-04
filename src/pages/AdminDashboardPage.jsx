@@ -4,14 +4,20 @@ import dot from '../images/ellipse.svg';
 import iconLogout from '../images/icon-logout.png';
 import VideoCard from '../components/VideoCard';
 import arrow from '../images/arrow.png'
+import Loading from '../components/Loading';
 
 const AdminDashboardPage = () => {
     // video list
+    const [data, setData] = useState(null);
     const [videos, setVideos] = useState([]);
 
     // get current date
-    const date = new Date().toString().split(' ');
-    const today = `${date[2]} ${date[1]} ${date[3]}`;
+    const date = new Date();
+
+    const dateArr = date.toString().split(' ');
+    const today = `${dateArr[2]} ${dateArr[1]} ${dateArr[3]}`;
+
+    var time = date.getHours() + ":" + date.getMinutes();
 
     // load video date
     useEffect(() => {
@@ -21,15 +27,18 @@ const AdminDashboardPage = () => {
 
             if (!result.error) {
                 setVideos(result.list);
+                setData(result);
             }
         };
 
         loadVideo();
     }, []);
 
-    if (!videos) {
-        return;
+    if (!data) {
+        return <Loading />;
     }
+
+    console.log(data)
 
     return (
         <section className="w-full h-full pb-32 bg-[#111111]">
@@ -56,13 +65,12 @@ const AdminDashboardPage = () => {
                             Submissions OPEN
                         </p>
                         <img src={dot} alt="ellipse mark" />
-                        <p>{'11:34'}</p>
+                        <p>{time}</p>
                     </div>
                 </div>
             </div>
 
             <div className="max-w-[76rem] mb-2 mx-auto">
-                
                 <div className="px-6 h-[2.1875rem] w-full mb-4 flex justify-between">
                         <div className="flex items-center gap-6">
                             <p className="text-[#696969]">#</p>
@@ -82,6 +90,10 @@ const AdminDashboardPage = () => {
                 {videos.map((video) => (
                     <VideoCard key={video.id} card={video}></VideoCard>
                 ))}
+            </div>
+
+            <div className="">
+
             </div>
         </section>
     );
