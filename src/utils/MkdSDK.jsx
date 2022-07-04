@@ -15,6 +15,26 @@ export default function MkdSDK() {
   
   this.login = async function (email, password, role) {
     //TODO
+    const getResult = await fetch('https://reacttask.mkdlabs.com/v2/api/lambda/login', {
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/json',
+        'x-project': 'cmVhY3R0YXNrOjVmY2h4bjVtOGhibzZqY3hpcTN4ZGRvZm9kb2Fjc2t5ZQ==',
+      },
+      body: JSON.stringify({email, password, role})
+    })
+
+    const jsonGet = await getResult.json();
+
+    if (getResult.status === 401) {
+      throw new Error(jsonGet.message);
+    }
+
+    if (getResult.status === 403) {
+      throw new Error(jsonGet.message);
+    }
+
+    return jsonGet;
   };
 
   this.getHeader = function () {
@@ -88,6 +108,27 @@ export default function MkdSDK() {
 
   this.check = async function (role) {
     //TODO
+    const getResult = await fetch('https://reacttask.mkdlabs.com/v2/api/lambda/check', {
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/json',
+        'x-project': 'cmVhY3R0YXNrOjVmY2h4bjVtOGhibzZqY3hpcTN4ZGRvZm9kb2Fjc2t5ZQ==',
+        'Bearer':  `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify(role)
+    })
+
+    const jsonGet = await getResult.json();
+
+    if (getResult.status === 401) {
+      throw new Error(jsonGet.message);
+    }
+
+    if (getResult.status === 403) {
+      throw new Error(jsonGet.message);
+    }
+
+    return jsonGet;
   };
 
   return this;

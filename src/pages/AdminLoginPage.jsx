@@ -28,22 +28,14 @@ const AdminLoginPage = () => {
 
   const onSubmit = async (data) => {
     let sdk = new MkdSDK();
+    const role = 'admin';
     
     //TODO
-    fetch('https://reacttask.mkdlabs.com/v2/api/lambda/login', {
-      method: 'POST', 
-      headers: {
-        'Content-Type': 'application/json',
-        'x-project': 'cmVhY3R0YXNrOjVmY2h4bjVtOGhibzZqY3hpcTN4ZGRvZm9kb2Fjc2t5ZQ==',
-      },
-      body: JSON.stringify({...data, role: 'admin'})
-    })
-    .then(res => res.json())
-    .then(result => {
-      if(!result.error) {
-        navigate('/dashboard')
-      }
-    })
+    const result = await sdk.login(data.email, data.password, role);
+
+    if(result) {
+      localStorage.setItem(`token`, result.token);
+    }
   };
 
   return (
