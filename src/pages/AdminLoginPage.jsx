@@ -5,6 +5,7 @@ import * as yup from "yup";
 import MkdSDK from "../utils/MkdSDK";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../authContext";
+import SnackBar from "../components/SnackBar";
 
 const AdminLoginPage = () => {
   const schema = yup
@@ -27,12 +28,27 @@ const AdminLoginPage = () => {
 
   const onSubmit = async (data) => {
     let sdk = new MkdSDK();
+    
     //TODO
-    console.log(data)
+    fetch('https://reacttask.mkdlabs.com/v2/api/lambda/login', {
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/json',
+        'x-project': 'cmVhY3R0YXNrOjVmY2h4bjVtOGhibzZqY3hpcTN4ZGRvZm9kb2Fjc2t5ZQ==',
+      },
+      body: JSON.stringify({...data, role: 'admin'})
+    })
+    .then(res => res.json())
+    .then(result => {
+      if(!result.error) {
+        navigate('/dashboard')
+      }
+    })
   };
 
   return (
     <div className="w-full max-w-xs mx-auto">
+      {/* <SnackBar /> */}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-8 "
