@@ -47,6 +47,13 @@ const AdminDashboardPage = () => {
         loadVideos();
     }, [currentPage]);
 
+    // const logout = () => {
+    //     dispatch({
+    //         type: 'Logout',
+    //     });
+    //     window.location.href = '/' + role + '/login';
+    // };
+
     if (!data) {
         return <Loading />;
     }
