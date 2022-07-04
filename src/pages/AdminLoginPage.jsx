@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -6,6 +6,7 @@ import MkdSDK from "../utils/MkdSDK";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../authContext";
 import SnackBar from "../components/SnackBar";
+import { useState } from "react";
 
 const AdminLoginPage = () => {
   const schema = yup
@@ -15,6 +16,9 @@ const AdminLoginPage = () => {
     })
     .required();
 
+  // login state
+  const [login, setLogin] = useState(false)
+  
   const { dispatch } = React.useContext(AuthContext);
   const navigate = useNavigate();
   const {
@@ -33,10 +37,22 @@ const AdminLoginPage = () => {
     //TODO
     const result = await sdk.login(data.email, data.password, role);
 
+    // set access token
     if(result) {
       localStorage.setItem(`token`, result.token);
+
+      if(!result.error) {
+        setLogin(true)
+      }
     }
   };
+
+  // navigate page
+  useEffect(() => {
+    if(login) {
+      navigate('/dashboard')
+    }
+  }, [login])
 
   return (
     <div className="w-full max-w-xs mx-auto">
